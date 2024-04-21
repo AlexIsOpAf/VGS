@@ -1,0 +1,2 @@
+# VGS
+Vanguard Gaming Series
