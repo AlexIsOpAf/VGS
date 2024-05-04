@@ -36,6 +36,7 @@ Objectives:
 
 ## Architecture Overview
 
+```
 /vgs
 │
 ├── /frontend
@@ -61,6 +62,8 @@ Objectives:
     ├── go.mod
     ├── go.sum
     └── Dockerfile
+
+```
 
 ### Pre-Production
 
