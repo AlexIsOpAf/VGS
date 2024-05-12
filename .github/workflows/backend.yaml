@@ -1,6 +1,11 @@
 name: Backend CI/CD Pipeline
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
 
 
 

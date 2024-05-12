@@ -85,14 +85,18 @@ Can use external services like Firebase for real-time notifications or a simple 
 Provides a web interface for admins to CRUD operations directly related to all entities (users, teams, competitions).
 Leverage Django’s admin console or Angular with Bootstrap for creating custom admin pages.
 
-
-[Insert diagram or link to diagram here]
-
 ### Production
+![production-architecture](assets/vgs-architecture.png)
+
+Considerations:
+
+- Load Balancing: The use of ALB suggests that the application expects HTTP/HTTPS traffic. Make sure that the ALB is correctly configured to handle SSL termination to offload SSL processing from the ECS containers.
+
+- Consider implementing stricter access controls, possibly via an IP whitelist or VPN access for Admin Panel Access.
+
+- Integrate AWS CloudWatch for monitoring and logging to keep track of application and infrastructure performance.
 
 ### Technology Stack 
-
-TODO: Update
 
 Frontend: Typescript, Redux for state management
 Backend: gRPC based services
