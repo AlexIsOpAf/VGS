@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package users;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/vgs/api/users/v1";
+
+service UserService {
+  rpc GetUsers(GetUsersRequest) returns (GetUsersResponse) {
+    option (google.api.http) = {
+      get : "/v1/users/{id=*}"
+    };
+  }
+  // rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {
+  //   option (google.api.http) = {
+  //     get : "/v1/users"
+  //   };
+  // }
+  // rpc CreateUsers(CreateUsersRequest) returns (CreateUsersResponse) {
+  //   option (google.api.http) = {
+  //     post : "/v1/users"
+  //     body : "*"
+  //   };
+  // }
+  // rpc UpdateUsers(UpdateUsersRequest) returns (UpdateUsersResponse) {
+  //   option (google.api.http) = {
+  //     patch : "/v1/users/{id=*}"
+  //     body : "*"
+  //   };
+  // }
+  // rpc DisableUsers(DisableUsersRequest) returns (DisableUsersResponse) {
+  //   option (google.api.http) = {
+  //     patch : "/v1/users/{id=*}:disable"
+  //     body : "*"
+  //   };
+  // }
+}
+
+message GetUsersRequest { string id = 1; }
+
+message GetUsersResponse { repeated Users user = 1; }
+
+message Users {
+  string id = 1;
+  string cognito_id = 2;
+  string username = 3;
+  string role = 4 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      enum : [
+        "player",
+        "manager",
+      ]
+    },
+    (validate.rules).string = {in : [ "player", "manager" ]}
+  ];
+}

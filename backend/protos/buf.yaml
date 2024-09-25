@@ -1,0 +1,4 @@
+version: v1
+lint:
+  ignore:
+    - protoc-gen-validate
