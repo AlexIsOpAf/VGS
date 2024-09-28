@@ -1,26 +1,102 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import * as React from 'react';
+import { CssVarsProvider } from '@mui/joy/styles';
+import CssBaseline from '@mui/joy/CssBaseline';
+import Box from '@mui/joy/Box';
+import Button from '@mui/joy/Button';
+import Breadcrumbs from '@mui/joy/Breadcrumbs';
+import Link from '@mui/joy/Link';
+import Typography from '@mui/joy/Typography';
 
-function App() {
+import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
+import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
+import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
+
+import Sidebar from './app/components/Sidebar';
+import OrderTable from './app/components/OrderTable';
+import OrderList from './app/components/OrderList';
+import Header from './app/components/Header';
+
+export default function JoyOrderDashboardTemplate() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <CssVarsProvider disableTransitionOnChange>
+      <CssBaseline />
+      <Box sx={{ display: 'flex', minHeight: '100dvh' }}>
+        <Header />
+        <Sidebar />
+        <Box
+          component="main"
+          className="MainContent"
+          sx={{
+            px: { xs: 2, md: 6 },
+            pt: {
+              xs: 'calc(12px + var(--Header-height))',
+              sm: 'calc(12px + var(--Header-height))',
+              md: 3,
+            },
+            pb: { xs: 2, sm: 2, md: 3 },
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            minWidth: 0,
+            height: '100dvh',
+            gap: 1,
+          }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Breadcrumbs
+              size="sm"
+              aria-label="breadcrumbs"
+              separator={<ChevronRightRoundedIcon fontSize="small" />}
+              sx={{ pl: 0 }}
+            >
+              <Link
+                underline="none"
+                color="neutral"
+                href="#some-link"
+                aria-label="Home"
+              >
+                <HomeRoundedIcon />
+              </Link>
+              <Link
+                underline="hover"
+                color="neutral"
+                href="#some-link"
+                fontSize={12}
+                fontWeight={500}
+              >
+                Dashboard
+              </Link>
+              <Typography color="primary" fontWeight={500} fontSize={12}>
+                Orders
+              </Typography>
+            </Breadcrumbs>
+          </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              mb: 1,
+              gap: 1,
+              flexDirection: { xs: 'column', sm: 'row' },
+              alignItems: { xs: 'start', sm: 'center' },
+              flexWrap: 'wrap',
+              justifyContent: 'space-between',
+            }}
+          >
+            <Typography level="h2" component="h1">
+              Orders
+            </Typography>
+            <Button
+              color="primary"
+              startDecorator={<DownloadRoundedIcon />}
+              size="sm"
+            >
+              Download PDF
+            </Button>
+          </Box>
+          <OrderTable />
+          <OrderList />
+        </Box>
+      </Box>
+    </CssVarsProvider>
   );
 }
-
-export default App;
