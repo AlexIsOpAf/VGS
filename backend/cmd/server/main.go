@@ -1,6 +1,66 @@
 package main
 
 import (
+	"context"
+	"flag"
+	"log"
+	"net"
+	"net/http"
+
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/vgs/api/services/v1/users"
+	"google.golang.org/grpc"
+)
+
+var (
+	grpcServerEndpoint = flag.String("grpc-server-endpoint", "localhost:50051", "gRPC server endpoint")
+)
+
+type userServiceServer struct {
+	users.UnimplementedUserServiceServer
+}
+
+// Implement your gRPC methods here
+func (s *userServiceServer) ListUsers(ctx context.Context, req *users.ListUsersRequest) (*users.ListUsersResponse, error) {
+	// Example implementation
+	return &users.ListUsersResponse{}, nil
+}
+
+// gRPC Server Setup
+func runGRPCServer() {
+	lis, err := net.Listen("tcp", ":50051")
+	if err != nil {
+		log.Fatalf("Failed to listen on port 50051: %v", err)
+	}
+
+	s := grpc.NewServer()
+	users.RegisterUserServiceServer(s, &userServiceServer{})
+
+	log.Println("gRPC server running on :50051...")
+	if err := s.Serve(lis); err != nil {
+		log.Fatalf("Failed to serve gRPC server: %v", err)
+	}
+}
+
+// gRPC-Gateway Setup
+func runHTTPServer() {
+	ctx := context.Background()
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
+	mux := runtime.NewServeMux()
+	opts := []grpc.DialOption{grpc.WithInsecure()}
+	err := users.RegisterUserServiceHandlerFromEndpoint(ctx, mux, *grpcServerEndpoint, opts)
+	if err != nil {
+		log.Fatalf("Failed to register gRPC-Gateway: %v", err)
+	}
+
+	log.Println("HTTP server running on :8080...")
+	if err := http.ListenAndServe(":8080", mux); err != nil {
+		log.Fatalf("Failed to serve HTTP: %v", err)
+	}
+}
+import (
     "database/sql"
     "fmt"
     "log"
@@ -10,7 +70,11 @@ import (
 )
 
 func main() {
-    fmt.Println("Backend server started")
+	flag.Parse()
+
+	// Run the gRPC and HTTP servers concurrently
+	go runGRPCServer()
+	runHTTPServer()
     // Get database connection info from environment variables
     dbHost := os.Getenv("DB_HOST")
     dbPort := os.Getenv("DB_PORT")

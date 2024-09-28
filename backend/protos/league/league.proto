@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+package leagues;
+
+option go_package = "github.com/vgs/api/leagues/v1";

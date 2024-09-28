@@ -1,4 +1,4 @@
 version: v1
-lint:
-  ignore:
-    - protoc-gen-validate
+name: buf.build/backend/protos
+deps:
+  - buf.build/googleapis/googleapis

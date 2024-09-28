@@ -103,3 +103,25 @@ Backend: gRPC based services
 Database: PostgreSQL, Cassandra, Redis for Cache Layer
 Infrastructure: AWS Services
 CI/CD: Github Actions
+
+
+### Development
+
+Adding now so I don't forget and cry later.
+
+Makefile Usage:
+
+Generate the gRPC code for your platform:
+```
+make generate
+```
+
+Clean the generated files:
+```
+make clean
+```
+
+Uninstall dependencies:
+```
+make uninstall_deps
+```

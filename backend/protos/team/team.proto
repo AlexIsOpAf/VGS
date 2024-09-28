@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+package teams;
+
+option go_package = "github.com/vgs/api/teams/v1";

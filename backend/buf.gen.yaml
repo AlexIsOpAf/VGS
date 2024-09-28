@@ -1,8 +1,11 @@
 version: v1
 plugins:
   - name: go
-    out: services
+    out: ./services/v1
     opt: paths=source_relative
   - name: go-grpc
-    out: services
+    out: ./services/v1
+    opt: paths=source_relative
+  - name: grpc-gateway
+    out: ./services/v1
     opt: paths=source_relative

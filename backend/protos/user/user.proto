@@ -2,56 +2,82 @@ syntax = "proto3";
 
 package users;
 
+option go_package = "github.com/vgs/api/users/v1";
 import "google/api/annotations.proto";
 
-option go_package = "github.com/vgs/api/users/v1";
-
-service UserService {
-  rpc GetUsers(GetUsersRequest) returns (GetUsersResponse) {
+service Userervice {
+  rpc GetUser(GetUserRequest) returns (GetUserResponse) {
     option (google.api.http) = {
-      get : "/v1/users/{id=*}"
+      get : "/v1/user/{user_id=*}"
     };
   }
-  // rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {
-  //   option (google.api.http) = {
-  //     get : "/v1/users"
-  //   };
-  // }
-  // rpc CreateUsers(CreateUsersRequest) returns (CreateUsersResponse) {
-  //   option (google.api.http) = {
-  //     post : "/v1/users"
-  //     body : "*"
-  //   };
-  // }
-  // rpc UpdateUsers(UpdateUsersRequest) returns (UpdateUsersResponse) {
-  //   option (google.api.http) = {
-  //     patch : "/v1/users/{id=*}"
-  //     body : "*"
-  //   };
-  // }
-  // rpc DisableUsers(DisableUsersRequest) returns (DisableUsersResponse) {
-  //   option (google.api.http) = {
-  //     patch : "/v1/users/{id=*}:disable"
-  //     body : "*"
-  //   };
-  // }
+  rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {
+    option (google.api.http) = {
+      get : "/v1/users"
+    };
+  }
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {
+    option (google.api.http) = {
+      post : "/v1/users"
+      body : "*"
+    };
+  }
+  rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse) {
+    option (google.api.http) = {
+      patch : "/v1/users/{user_id=*}"
+      body : "*"
+    };
+  }
+  rpc DisableUser(DisableUserRequest) returns (DisableUserResponse) {
+    option (google.api.http) = {
+      patch : "/v1/users/{user_id=*}:disable"
+      body : "*"
+    };
+  }
 }
 
-message GetUsersRequest { string id = 1; }
+message GetUserRequest { string user_id = 1; }
 
-message GetUsersResponse { repeated Users user = 1; }
+message GetUserResponse { repeated User user = 1; }
 
-message Users {
+message ListUsersRequest {
+  // Optional filters, pagination, etc. can be added later
+}
+
+message ListUsersResponse {
+  repeated User users = 1;
+}
+
+message CreateUserRequest {
+  string name = 1;
+  string email = 2;
+  string password = 3;
+}
+
+message CreateUserResponse { User user = 1; }
+
+message UpdateUserRequest {
+  string user_id = 1;
+  string name = 2;
+  string email = 3;
+  string password = 4;
+}
+
+message UpdateUserResponse { User user = 1; }
+
+message DisableUserRequest { string user_id = 1; }
+
+message DisableUserResponse { User user = 1; }
+
+// Admin will exist in AWS cognito. Not in application code
+enum UserRoles {
+  Basic = 0;
+  Enhanced = 1;
+}
+
+message User {
   string id = 1;
   string cognito_id = 2;
   string username = 3;
-  string role = 4 [
-    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
-      enum : [
-        "player",
-        "manager",
-      ]
-    },
-    (validate.rules).string = {in : [ "player", "manager" ]}
-  ];
+  UserRoles role = 4;
 }
