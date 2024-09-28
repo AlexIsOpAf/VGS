@@ -1,0 +1,66 @@
+CREATE TABLE Users (
+  id SERIAL PRIMARY KEY, 
+  name VARCHAR (200) UNIQUE NOT NULL, 
+  password VARCHAR (50) NOT NULL, 
+  email VARCHAR (255) UNIQUE NOT NULL, 
+  created_at TIMESTAMP NOT NULL, 
+  updated_at TIMESTAMP NOT NULL, 
+  last_login TIMESTAMP
+);
+
+CREATE TABLE Games (
+  id SERIAL PRIMARY KEY, 
+  name VARCHAR (200) UNIQUE NOT NULL, 
+  description VARCHAR (1000) UNIQUE NOT NULL, 
+  email VARCHAR (255) UNIQUE NOT NULL, 
+  created_at TIMESTAMP NOT NULL, 
+  updated_at TIMESTAMP NOT NULL
+);
+
+CREATE TABLE Leagues (
+  id SERIAL PRIMARY KEY, 
+  game_id INT,
+  name VARCHAR (200) UNIQUE NOT NULL, 
+  description VARCHAR (1000) UNIQUE NOT NULL, 
+  created_at TIMESTAMP NOT NULL, 
+  updated_at TIMESTAMP NOT NULL,
+  CONSTRAINT game_id
+        FOREIGN KEY (game_id) 
+        REFERENCES Games(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE Teams (
+  id SERIAL PRIMARY KEY, 
+  manager_id INT,
+  name VARCHAR (200) UNIQUE NOT NULL, 
+  description VARCHAR (1000) UNIQUE NOT NULL, 
+  created_at TIMESTAMP NOT NULL, 
+  updated_at TIMESTAMP NOT NULL,
+  CONSTRAINT manager_id
+	FOREIGN KEY (manager_id) 
+	REFERENCES Users(id)
+	ON DELETE CASCADE
+	ON UPDATE CASCADE
+);
+
+CREATE TABLE LeagueTeams (
+  id SERIAL PRIMARY KEY, 
+  league_id INT,
+  team_id INT,
+  name VARCHAR (200) UNIQUE NOT NULL, 
+  description VARCHAR (1000) UNIQUE NOT NULL, 
+  created_at TIMESTAMP NOT NULL, 
+  updated_at TIMESTAMP NOT NULL,
+  CONSTRAINT league_id
+	FOREIGN KEY (league_id) 
+	REFERENCES Leagues(id)
+	ON DELETE CASCADE
+	ON UPDATE CASCADE,
+  CONSTRAINT team_id
+	FOREIGN KEY (team_id) 
+	REFERENCES Teams(id)
+	ON DELETE CASCADE
+	ON UPDATE CASCADE
+);
