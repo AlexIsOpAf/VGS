@@ -22,7 +22,7 @@ OUT_DIR := ./services
 # Install Buf for Linux
 install_buf_linux:
 	@echo "Installing Buf for Linux..."
-	curl -sSL https://github.com/bufbuild/buf/releases/download/$(BUF_VERSION)/buf-Linux-x86_64 -o $(BUF) && chmod +x $(BUF)
+	brew install bufbuild/buf/buf
 
 # Install Buf for macOS
 install_buf_mac:
@@ -36,7 +36,7 @@ install_buf_mac:
 # Install Buf for Windows
 install_buf_windows:
 	@echo "Installing Buf for Windows..."
-	curl -sSL https://github.com/bufbuild/buf/releases/download/$(BUF_VERSION)/buf-Windows-x86_64.exe -o $(BUF_EXE) && chmod +x $(BUF_EXE)
+		curl -sSL https://github.com/bufbuild/buf/releases/download/$(BUF_VERSION)/buf-Windows-x86_64.exe -o $(BUF_EXE) && chmod +x $(BUF_EXE)
 
 # Install Go plugins
 install_protoc_plugins:
@@ -64,7 +64,6 @@ deps_windows: install_buf_windows install_protoc_plugins
 
 # Generate gRPC code for Linux
 generate_linux: deps_linux
-	@echo "Generating gRPC code for Linux..."
 	@PATH=$(GOBIN):$$PATH $(BUF) generate $(PROTO_DIR)
 
 # Generate gRPC code for macOS
